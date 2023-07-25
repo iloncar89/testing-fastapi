@@ -1,0 +1,7 @@
+db:
+  url: "postgresql://postgres:testpass@postgres/postgres?sslmode=disable"
+  user: "postgres"
+  password: "testpass"
+  database: "postgres"
+  host: "postgres"
+  port: 5432

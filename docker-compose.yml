@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=testpass
+
+  second:
+    depends_on:
+      - postgres
+    image: postgres
+    command: >
+      bash -c "
+        while ! pg_isready -h postgres -p 5432 -U postgres; do sleep 1; done &&
+        echo 'create table person (id BIGSERIAL not null primary key,first_name VARCHAR(255) not null,last_name VARCHAR(255) not null,year_of_birth int not null);' |
+        PGPASSWORD=testpass psql -U postgres -d postgres -h postgres -p 5432
+      "
+
+  mainapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      second:
+        condition: service_completed_successfully
+    ports:
+      - 8084:8000
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=testpass

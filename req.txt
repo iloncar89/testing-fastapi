@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+dependency_injector
+dependency_injection
+sqlalchemy
+psycopg2-binary
+pydantic
+PyYAML
